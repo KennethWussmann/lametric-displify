@@ -10,15 +10,15 @@ import de.ketrwu.lametric.entity.lametric.LaMetricIcon;
 import de.ketrwu.lametric.entity.lametric.LaMetricRequest;
 import de.ketrwu.lametric.entity.lametric.LaMetricResponse;
 import org.apache.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 public abstract class LaMetricAppHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LaMetricAppHandler.class);
+    private static final Logger LOG = LogManager.getLogger(LaMetricAppHandler.class);
 
     abstract LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception;
     abstract boolean requireAuthorization();
@@ -26,6 +26,8 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
         LaMetricRequest request = getLaMetricRequest(input);
         LaMetricResponse response;
+
+        LOG.info("Request: " + request.toString());
 
         if (requireAuthorization() && (request.getAuthorization() == null || request.getAuthorization().isEmpty())) {
             response = new LaMetricResponse(HttpStatus.SC_FORBIDDEN).frame(
@@ -41,9 +43,10 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
         }
 
         try {
+            LOG.info("Response: " + response.toString());
             return new ApiGatewayResponse(response.getStatusCode(), JacksonUtils.getObjectMapper().writeValueAsString(response));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             return new ApiGatewayResponse(HttpStatus.SC_UNPROCESSABLE_ENTITY, e.getOriginalMessage());
         }
     }

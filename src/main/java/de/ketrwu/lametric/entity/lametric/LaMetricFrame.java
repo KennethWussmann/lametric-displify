@@ -1,8 +1,10 @@
 package de.ketrwu.lametric.entity.lametric;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
 public class LaMetricFrame {
 
     private String text;

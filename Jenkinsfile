@@ -1,21 +1,28 @@
 pipeline {
     agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                npm ci
-                mvn clean install
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
+    withCredentials([string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
+        stages {
+            stage ('Initialize') {
+                steps {
+                    sh '''
+                        echo "PATH = ${PATH}"
+                        echo "M2_HOME = ${M2_HOME}"
+                    '''
+                }
             }
-        }
-        stage('Test') {
-            steps {
-                mvn test
+            stage('Build') {
+                steps {
+                    sh 'mvn clean install -Pfrontend-clean'
+                }
             }
-        }
-        stage('Deploy') {
-            steps {
-                sls deploy --stage dev
+            stage('Deploy') {
+                steps {
+                    sh 'sls deploy --stage dev'
+                }
             }
         }
     }

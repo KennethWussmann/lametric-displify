@@ -20,8 +20,11 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                withCredentials([string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'sls deploy --stage dev'
+                withCredentials([
+                    string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh 'npm run deploy:dev'
                 }
             }
         }

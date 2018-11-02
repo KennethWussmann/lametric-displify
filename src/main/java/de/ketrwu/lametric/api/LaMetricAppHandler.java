@@ -4,21 +4,20 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.ketrwu.lametric.JacksonUtils;
+import de.ketrwu.lametric.Logger;
 import de.ketrwu.lametric.entity.ApiGatewayResponse;
 import de.ketrwu.lametric.entity.lametric.LaMetricFrame;
 import de.ketrwu.lametric.entity.lametric.LaMetricIcon;
 import de.ketrwu.lametric.entity.lametric.LaMetricRequest;
 import de.ketrwu.lametric.entity.lametric.LaMetricResponse;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 public abstract class LaMetricAppHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
-    private static final Logger LOG = LogManager.getLogger(LaMetricAppHandler.class);
+    private static final Logger LOG = new Logger(LaMetricAppHandler.class);
 
     abstract LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception;
     abstract boolean requireAuthorization();
@@ -27,12 +26,13 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
         LaMetricRequest request = getLaMetricRequest(input);
         LaMetricResponse response;
 
-        LOG.info("Request: " + request.toString());
+        LOG.info("Request", request);
 
         if (requireAuthorization() && (request.getAuthorization() == null || request.getAuthorization().isEmpty())) {
             response = new LaMetricResponse(HttpStatus.SC_FORBIDDEN).frame(
                     new LaMetricFrame.Builder().text("No auth present!").icon(LaMetricIcon.ATTENTION).build()
             );
+            LOG.warn("Unauthenticated", request.getDeviceId());
         } else {
             try {
                 response = handleRequest(request, getQueryParameters(input));
@@ -43,7 +43,7 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
         }
 
         try {
-            LOG.info("Response: " + response.toString());
+            LOG.info("Response", response);
             return new ApiGatewayResponse(response.getStatusCode(), JacksonUtils.getObjectMapper().writeValueAsString(response));
         } catch (JsonProcessingException e) {
             LOG.error(e.getMessage(), e);

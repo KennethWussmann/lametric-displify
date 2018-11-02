@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Building on branch $BRANCH_NAME"
+                echo "Building on branch" + env.BRANCH_NAME
                 sh 'mvn clean install -Pfrontend-clean'
                 archiveArtifacts 'target/*.jar'
             }

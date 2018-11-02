@@ -16,6 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean install -Pfrontend-clean'
+                archive 'target/*.jar'
             }
         }
         stage('Deploy') {

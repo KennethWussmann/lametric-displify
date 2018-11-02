@@ -1,8 +1,8 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
+        maven 'Maven'
+        jdk 'JDK8'
     }
     withCredentials([string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
         stages {

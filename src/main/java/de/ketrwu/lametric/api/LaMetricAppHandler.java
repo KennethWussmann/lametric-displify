@@ -20,6 +20,7 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
     private static final Logger LOG = new Logger(LaMetricAppHandler.class);
 
     abstract LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception;
+
     abstract boolean requireAuthorization();
 
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {

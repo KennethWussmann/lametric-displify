@@ -4,17 +4,18 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                npm ci
+                mvn clean install
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                mvn test
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                sls deploy --stage dev
             }
         }
     }

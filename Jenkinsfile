@@ -5,27 +5,33 @@ pipeline {
         jdk 'JDK8'
     }
     stages {
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean install -Pfrontend-clean'
                 archive 'target/*.jar'
             }
         }
-        stage('Deploy') {
+        stage('Deploy Development') {
+            when { branch 'develop' }
             steps {
+                echo "Deploying on stage: dev"
                 withCredentials([
                     string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     sh 'npm run deploy:dev'
+                }
+            }
+        }
+        stage('Deploy Production') {
+            when { branch 'master' }
+            steps {
+                echo "Deploying on stage: prd"
+                withCredentials([
+                    string(credentialsId: 'aws-deploy-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-deploy-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh 'npm run deploy:prd'
                 }
             }
         }

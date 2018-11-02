@@ -6,6 +6,12 @@ provider:
   memorySize: 256
   timeout: 20
   versionFunctions: false
+  stage: ${self:custom.Stage}
+  environment:
+    STAGE: ${self:custom.Stage}
+
+custom:
+  Stage: ${env:STAGE, 'dev'}
 
 package:
   artifact: target/lametric-displify-1.0.0-SNAPSHOT.jar

@@ -2,13 +2,11 @@ package de.ketrwu.lametric.entity.lametric;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString(callSuper = true)
 public class LaMetricResponse {
 
     @JsonIgnore

@@ -2,13 +2,11 @@ package de.ketrwu.lametric.entity.spotify;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString(callSuper = true)
 public class SpotifyTrack {
 
     private String name;

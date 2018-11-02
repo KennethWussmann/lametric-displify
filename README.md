@@ -2,7 +2,7 @@
 LaMetric time app based on AWS Lambda for displaying your currently playing Spotify track on your LaMetric time.
 
 ## Build
-Install Serverless Framework and create deployable JAR
+Install Node, Serverless Framework and create deployable JAR
 ```
 mvn clean install
 ```

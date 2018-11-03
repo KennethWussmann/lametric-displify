@@ -62,9 +62,9 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
             auth = "Bearer " + auth;
         }
         return new LaMetricRequest(
-                context.getAwsRequestId(),
                 headers.get("x-lametric-device-id"),
                 headers.get("x-lametric-app-instance"),
+                context.getAwsRequestId(),
                 auth
         );
     }

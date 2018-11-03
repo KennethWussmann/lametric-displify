@@ -3,17 +3,17 @@ package de.ketrwu.lametric;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableMap;
 import de.ketrwu.lametric.entity.lametric.LaMetricRequest;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.util.Map;
 
 public class Logger {
 
-    private org.apache.logging.log4j.Logger logger;
+    private org.slf4j.Logger logger;
 
     public Logger(Class clazz) {
-        this.logger = LogManager.getLogger(clazz);
+        this.logger = LoggerFactory.getLogger(clazz);
     }
 
     private void log(LaMetricRequest request, Level level, String message, Object obj) {
@@ -24,9 +24,19 @@ public class Logger {
                 "data", obj
         );
         try {
-            logger.log(level, JacksonUtils.getObjectMapper().writeValueAsString(map));
-        } catch (JsonProcessingException irgnored) {
-            logger.log(level, message, obj);
+            String content = JacksonUtils.getObjectMapper().writeValueAsString(map);
+            switch (level) {
+                case ERROR:
+                    logger.error(content);
+                    break;
+                case WARN:
+                    logger.warn(content);
+                    break;
+                default:
+                    logger.info(content);
+            }
+        } catch (JsonProcessingException ignored) {
+            logger.error(message, obj);
         }
     }
 

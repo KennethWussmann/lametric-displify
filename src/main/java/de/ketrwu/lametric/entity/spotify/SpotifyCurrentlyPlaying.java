@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
+@SpotifyEndpoint("/me/player/currently-playing")
 public class SpotifyCurrentlyPlaying extends SpotifyTrackRequest {
 
     @JsonProperty("is_playing")

@@ -16,7 +16,7 @@ public class DisplifyHandler extends LaMetricAppHandler {
     public LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception {
         SpotifyCurrentlyPlaying currentlyPlaying = SpotifyService.getCurrentlyPlaying(request);
 
-        if (currentlyPlaying.getError() != null) {
+        if (currentlyPlaying != null && currentlyPlaying.getError() != null) {
             return new LaMetricResponse(currentlyPlaying.getError().getStatus())
                     .frame(
                             new LaMetricFrame.Builder()
@@ -27,11 +27,11 @@ public class DisplifyHandler extends LaMetricAppHandler {
         }
 
         String text = "Spotify";
-        if (currentlyPlaying.isPlaying() && currentlyPlaying.getTrack() != null) {
+        if (currentlyPlaying != null && currentlyPlaying.isPlaying() && currentlyPlaying.getTrack() != null) {
             text = currentlyPlaying.getTrack().getArtistSongString();
         }
 
-        return new LaMetricResponse(HttpStatus.SC_OK, currentlyPlaying.isPlaying()).frame(
+        return new LaMetricResponse(HttpStatus.SC_OK, currentlyPlaying != null && currentlyPlaying.isPlaying()).frame(
                 new LaMetricFrame.Builder()
                         .icon(LaMetricIcon.DISPLIFY)
                         .text(text)

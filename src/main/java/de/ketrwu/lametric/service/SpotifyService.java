@@ -20,28 +20,28 @@ public class SpotifyService {
         Unirest.setTimeouts(2000, 2000);
     }
 
-    public static SpotifyCurrentlyPlaying getCurrentlyPlaying(LaMetricRequest laMetricRequest) throws UnirestException, IOException {
-        Unirest.setDefaultHeader("Authorization", laMetricRequest.getAuthorization());
+    public static SpotifyCurrentlyPlaying getCurrentlyPlaying(LaMetricRequest request) throws UnirestException, IOException {
+        Unirest.setDefaultHeader("Authorization", request.getAuthorization());
         HttpResponse<String> response = Unirest.get(API_URL_BASE + SPOTIFY_CURRENTLY_PLAYING).asString();
         boolean emptyBody = response.getBody() == null || response.getBody().isEmpty();
 
         if (response.getHeaders().get("Retry-After") != null) {
             String rt = response.getHeaders().get("Retry-After").get(0);
-            LOG.error("Spotify rate-limit", "Retry after " + rt + " seconds");
+            LOG.error(request, "Spotify rate-limit", "Retry after " + rt + " seconds");
             return new SpotifyCurrentlyPlaying();
         }
 
         if (emptyBody) {
-            LOG.info("Spotify no response", response.getStatus());
+            LOG.info(request, "Spotify no response", response.getStatus());
             return new SpotifyCurrentlyPlaying();
         }
 
         SpotifyCurrentlyPlaying currentlyPlaying = JacksonUtils.getObjectMapper().readValue(response.getBody(), SpotifyCurrentlyPlaying.class);
 
         if (response.getStatus() >= 200 && response.getStatus() < 300) {
-            LOG.info("Spotify ok", currentlyPlaying);
+            LOG.info(request, "Spotify ok", currentlyPlaying);
         } else {
-            LOG.warn("Spotify not ok", response);
+            LOG.warn(request, "Spotify not ok", response);
         }
         return currentlyPlaying;
     }

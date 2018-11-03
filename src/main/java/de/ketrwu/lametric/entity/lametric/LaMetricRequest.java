@@ -10,6 +10,7 @@ public class LaMetricRequest {
 
     private String deviceId;
     private String appInstance;
+    private String awsRequestId;
     @JsonIgnore
     private String authorization;
 

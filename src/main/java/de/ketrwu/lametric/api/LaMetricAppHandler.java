@@ -20,38 +20,40 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
     private static final Logger LOG = new Logger(LaMetricAppHandler.class);
 
     abstract LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception;
+
     abstract boolean requireAuthorization();
 
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
-        LaMetricRequest request = getLaMetricRequest(input);
+        LaMetricRequest request = getLaMetricRequest(input, context);
         LaMetricResponse response;
 
-        LOG.info("Request", request);
+        LOG.info(request, "Request", request);
+        
 
         if (requireAuthorization() && (request.getAuthorization() == null || request.getAuthorization().isEmpty())) {
             response = new LaMetricResponse(HttpStatus.SC_FORBIDDEN).frame(
                     new LaMetricFrame.Builder().text("No auth present!").icon(LaMetricIcon.ATTENTION).build()
             );
-            LOG.warn("Unauthenticated", request.getDeviceId());
+            LOG.warn(request, "Unauthenticated", request.getDeviceId());
         } else {
             try {
                 response = handleRequest(request, getQueryParameters(input));
             } catch (Exception e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error(request, e.getMessage(), e);
                 return new ApiGatewayResponse(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
 
         try {
-            LOG.info("Response", response);
+            LOG.info(request, "Response", response);
             return new ApiGatewayResponse(response.getStatusCode(), JacksonUtils.getObjectMapper().writeValueAsString(response));
         } catch (JsonProcessingException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error(request, e.getMessage(), e);
             return new ApiGatewayResponse(HttpStatus.SC_UNPROCESSABLE_ENTITY, e.getOriginalMessage());
         }
     }
 
-    private LaMetricRequest getLaMetricRequest(Map<String, Object> input) {
+    private LaMetricRequest getLaMetricRequest(Map<String, Object> input, Context context) {
         Map<String, String> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         headers.putAll((Map<? extends String, ? extends String>) input.get("headers"));
 
@@ -62,6 +64,7 @@ public abstract class LaMetricAppHandler implements RequestHandler<Map<String, O
         return new LaMetricRequest(
                 headers.get("x-lametric-device-id"),
                 headers.get("x-lametric-app-instance"),
+                context.getAwsRequestId(),
                 auth
         );
     }

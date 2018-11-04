@@ -1,10 +1,10 @@
 package de.ketrwu.lametric.api;
 
-import de.ketrwu.lametric.entity.lametric.LaMetricRequest;
-import de.ketrwu.lametric.entity.lametric.LaMetricResponse;
-import de.ketrwu.lametric.entity.spotify.SpotifyArtist;
-import de.ketrwu.lametric.entity.spotify.SpotifyCurrentlyPlaying;
-import de.ketrwu.lametric.entity.spotify.SpotifyTrack;
+import de.ketrwu.lametric.entity.SpotifyArtist;
+import de.ketrwu.lametric.entity.SpotifyCurrentlyPlaying;
+import de.ketrwu.lametric.entity.SpotifyTrack;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricRequest;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricResponse;
 import de.ketrwu.lametric.service.SpotifyService;
 import org.junit.BeforeClass;
 import org.junit.Test;

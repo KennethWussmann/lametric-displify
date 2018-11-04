@@ -1,16 +1,19 @@
 package de.ketrwu.lametric.api;
 
-import de.ketrwu.lametric.entity.lametric.LaMetricFrame;
-import de.ketrwu.lametric.entity.lametric.LaMetricIcon;
-import de.ketrwu.lametric.entity.lametric.LaMetricRequest;
-import de.ketrwu.lametric.entity.lametric.LaMetricResponse;
-import de.ketrwu.lametric.entity.spotify.SpotifyCurrentlyPlaying;
+import de.ketrwu.lametric.entity.SpotifyCurrentlyPlaying;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricFrame;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricIcon;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricRequest;
+import de.ketrwu.lametric.lambda.entity.lametric.LaMetricResponse;
+import de.ketrwu.lametric.lambda.handler.LaMetricAppHandler;
 import de.ketrwu.lametric.service.SpotifyService;
 import org.apache.http.HttpStatus;
 
 import java.util.Map;
 
 public class DisplifyHandler extends LaMetricAppHandler {
+
+    private static final String DISPLIFY_ICON = "i21651";
 
     @Override
     public LaMetricResponse handleRequest(LaMetricRequest request, Map<String, String> queryParams) throws Exception {
@@ -21,7 +24,7 @@ public class DisplifyHandler extends LaMetricAppHandler {
                     .frame(
                             new LaMetricFrame.Builder()
                                     .text("Failed to request Spotify track!")
-                                    .icon(LaMetricIcon.ATTENTION)
+                                    .icon(LaMetricIcon.ATTENTION.getIcon())
                                     .build()
                     );
         }
@@ -33,14 +36,14 @@ public class DisplifyHandler extends LaMetricAppHandler {
 
         return new LaMetricResponse(HttpStatus.SC_OK, currentlyPlaying != null && currentlyPlaying.isPlaying()).frame(
                 new LaMetricFrame.Builder()
-                        .icon(LaMetricIcon.DISPLIFY)
+                        .icon(DISPLIFY_ICON)
                         .text(text)
                         .build()
         );
     }
 
     @Override
-    boolean requireAuthorization() {
+    public boolean requireAuthorization() {
         return true;
     }
 }

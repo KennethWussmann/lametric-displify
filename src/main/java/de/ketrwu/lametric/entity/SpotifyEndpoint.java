@@ -1,4 +1,4 @@
-package de.ketrwu.lametric.entity.spotify;
+package de.ketrwu.lametric.entity;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

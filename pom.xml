@@ -70,7 +70,7 @@
     <repositories>
         <repository>
             <id>ketrwu-repo</id>
-            <url>http://repo.ketrwu.de/repository/maven-snapshots</url>
+            <url>http://repo.ketrwu.de/repository/maven-releases</url>
         </repository>
     </repositories>
 

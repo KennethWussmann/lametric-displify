@@ -1,4 +1,4 @@
-package de.ketrwu.lametric.entity.spotify;
+package de.ketrwu.lametric.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package de.ketrwu.lametric.entity.spotify;
+package de.ketrwu.lametric.entity;
 
 import lombok.Data;
 

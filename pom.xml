@@ -12,32 +12,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
-        <log4j.version>2.11.1</log4j.version>
-        <aws.lambda.version>1.1.0</aws.lambda.version>
-        <jackson.version>2.9.7</jackson.version>
         <powermock.version>1.7.1</powermock.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-core</artifactId>
-            <version>${aws.lambda.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-log4j2</artifactId>
+            <groupId>de.ketrwu</groupId>
+            <artifactId>lametric-lambda</artifactId>
             <version>1.0.0</version>
         </dependency>
 
@@ -59,23 +40,6 @@
             <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>junit</groupId>
@@ -102,6 +66,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>ketrwu-repo</id>
+            <url>http://repo.ketrwu.de/repository/maven-releases</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

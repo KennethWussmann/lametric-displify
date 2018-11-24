@@ -7,7 +7,7 @@ provider:
   timeout: 20
   versionFunctions: false
   stage: ${self:custom.Stage}
-  logRetentionInDays: 2
+  logRetentionInDays: 3
   environment:
     STAGE: ${self:custom.Stage}
 

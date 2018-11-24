@@ -7,6 +7,7 @@ provider:
   timeout: 20
   versionFunctions: false
   stage: ${self:custom.Stage}
+  logRetentionInDays: 3
   environment:
     STAGE: ${self:custom.Stage}
 
@@ -22,7 +23,3 @@ functions:
     tags:
       path: /displify
       method: GET
-    events:
-    - http:
-        path: /displify
-        method: GET

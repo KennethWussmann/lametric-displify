@@ -19,6 +19,9 @@ package:
 functions:
   displify:
     handler: de.ketrwu.lametric.api.DisplifyHandler
+    tags:
+      path: /displify
+      method: GET
     events:
     - http:
         path: /displify

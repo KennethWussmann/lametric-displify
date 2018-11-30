@@ -1,5 +1,6 @@
 package de.ketrwu.lametric.api;
 
+import com.google.common.collect.ImmutableMap;
 import de.ketrwu.lametric.entity.SpotifyArtist;
 import de.ketrwu.lametric.entity.SpotifyCurrentlyPlaying;
 import de.ketrwu.lametric.entity.SpotifyTrack;
@@ -63,6 +64,21 @@ class DisplifyHandlerTest {
         LaMetricResponse response = handler.handleRequest(LAMETRIC_REQUEST, Collections.emptyMap());
         assertThat(response.getFrames(), iterableWithSize(1));
         assertThat(response.getFrames().get(0).getText(), equalTo("Someone - Something"));
+        assertThat(response.isListening(), is(true));
+    }
+
+    @Test
+    public void handleRequest_Playing_SeparateArtistSongName() throws Exception {
+        mockStatic(SpotifyService.class);
+        when(SpotifyService.getCurrentlyPlaying(LAMETRIC_REQUEST)).thenReturn(SPOTIFY_CURRENTLY_PLAYING);
+
+        DisplifyHandler handler = new DisplifyHandler();
+        LaMetricResponse response = handler.handleRequest(LAMETRIC_REQUEST, ImmutableMap.of(
+                "artistSongSeparate", "true"
+        ));
+        assertThat(response.getFrames(), iterableWithSize(2));
+        assertThat(response.getFrames().get(0).getText(), equalTo("Someone"));
+        assertThat(response.getFrames().get(1).getText(), equalTo("Something"));
         assertThat(response.isListening(), is(true));
     }
 

@@ -29,17 +29,40 @@ public class DisplifyHandler extends LaMetricAppHandler {
                     );
         }
 
-        String text = "Spotify";
-        if (currentlyPlaying != null && currentlyPlaying.isPlaying() && currentlyPlaying.getTrack() != null) {
-            text = currentlyPlaying.getTrack().getArtistSongString();
-        }
+        LaMetricResponse response = new LaMetricResponse(HttpStatus.SC_OK, currentlyPlaying != null && currentlyPlaying.isPlaying());
+        boolean artistSongSeparate = queryParams.containsKey("artistSongSeparate") && queryParams.get("artistSongSeparate").equalsIgnoreCase("true");
 
-        return new LaMetricResponse(HttpStatus.SC_OK, currentlyPlaying != null && currentlyPlaying.isPlaying()).frame(
-                new LaMetricFrame.Builder()
-                        .icon(DISPLIFY_ICON)
-                        .text(text)
-                        .build()
-        );
+
+        if (currentlyPlaying != null && currentlyPlaying.isPlaying() && currentlyPlaying.getTrack() != null) {
+            if (artistSongSeparate) {
+                response.frame(
+                        new LaMetricFrame.Builder()
+                                .icon(DISPLIFY_ICON)
+                                .text(currentlyPlaying.getTrack().getArtists().get(0).getName())
+                                .build()
+                ).frame(
+                        new LaMetricFrame.Builder()
+                                .icon(DISPLIFY_ICON)
+                                .text(currentlyPlaying.getTrack().getName())
+                                .build()
+                );
+            } else {
+                response.frame(
+                        new LaMetricFrame.Builder()
+                                .icon(DISPLIFY_ICON)
+                                .text(currentlyPlaying.getTrack().getArtistSongString())
+                                .build()
+                );
+            }
+        } else {
+            response.frame(
+                    new LaMetricFrame.Builder()
+                            .icon(DISPLIFY_ICON)
+                            .text("Spotify")
+                            .build()
+            );
+        }
+        return response;
     }
 
     @Override
